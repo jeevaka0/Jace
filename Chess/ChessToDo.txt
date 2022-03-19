@@ -1,0 +1,53 @@
+Always improve performance to bring move time down to 150s. Improve the algorithm if performance does not help.
+
+Optimize 3897 until it takes less than 150s.
+Measure subsequent ones. If anything is below 750s optimize that.
+When 4001 (9 ply) is below 150s try it in the GUI to make sure that the continuation is correct.
+
+Move past Polgar4001.
+Make sure all Kasparyan ones call be solved.
+Try playing whole games from 1834. (DLB vs. McDonnel)
+
+---------------------
+0000000000000020 <Chess::PieceOps::stripColor(Chess::PieceEnum)>:
+  20:	89 f8                	mov    %edi,%eax
+  22:	83 e0 07             	and    $0x7,%eax
+  25:	c3                   	retq
+
+Understand the instruction codes.
+Write ASM block to just do edi & 7 and see if it set flags.
+Find out the reason why edi is not and'ed directly.
+
+Understand SuareOO= compilation.
+Understand splitColor assembler. Can optimize?
+Create Sak and test with random values. Try 2, then 1.
+
+
+Try Optimizations:
+- use perf to measure and improve. Understand how C++ constructs get translated.
+- Isolate a core and use cpu cycle count measurements. Investigate MSRs.
+- lto
+- assembler level? SIMD?
+
+Investigate the cost of repetitions and if they needs to be eliminated. (Can first count cases where halfmove clock is > 6.
+Is it updated correctly?)
+
+---- Mid size ideas ----
+
+Look how different C++ constructs end up getting compiled. Any tweaks to improve?
+(Read Agner books, intel guide after Stroustrup)
+
+Parallelize. Look into hardware specific improvements.
+
+==== C++ ====
+
+* Read C++ book and for each new concept:
++ Use in the app if it is not already there.
++ Understand the resulting assembler. Try micro-benchmarking, read elsewhere. Try different compiler/linker settings.
+
+[Once the book is over]
+* Look for ways to improve assembler.
+* Look for ways to benefit from hardware. (Pinned threads, use proximity, bus, memory.)
+* Use GPUs?
+* Move to kernel level and measure directly with MSRs.
+* Try FPGA
